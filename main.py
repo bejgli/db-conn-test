@@ -1,7 +1,6 @@
-import socket
 from flask import Flask, request
 import oracledb
-from oracledb.exceptions import Error
+import os
 
 import logging
 
@@ -12,15 +11,15 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     try:
+        dsn = os.environ["CONNECTION_STRING"]
+
         conn = oracledb.connect(
             user=request.args.get("user"),
             password=request.args.get("pw"),
-            dsn=request.args.get("dsn"),
+            dsn=dsn,
         )
-    except Error as e:
+    except Exception as e:
         logging.error(f"{e}")
-        logging.info(socket.gethostbyname(socket.getfqdn()))
-
         return f"Err {e}"
 
     return f"Oracle Database version: {conn.version}"
