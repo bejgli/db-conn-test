@@ -11,7 +11,7 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     try:
-        dsn = os.environ["CONNECTION_STRING"]
+        dsn = "tcps://" + os.environ["CONNECTION_STRING"]
 
         conn = oracledb.connect(
             user=request.args.get("user"),
